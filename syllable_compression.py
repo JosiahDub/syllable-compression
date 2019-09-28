@@ -1,4 +1,4 @@
-from nltk.corpus import words
+from nltk.corpus import brown
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
 import pandas as pd
@@ -23,7 +23,7 @@ def compress_word(word):
 
 def compress_all():
     compressed = []
-    for word in words.words():
+    for word in brown.words():
         new_word = compress_word(word)
         if len(new_word) < len(word):
             compression = len(new_word)/len(word)
@@ -36,11 +36,12 @@ def compress_all():
 
     df = pd.DataFrame(
         compressed,
-        columns=['old_word',
-                 'new_word',
-                 'old_word_length',
-                 'compression',
-                 ]
+        columns=[
+            'old_word',
+            'new_word',
+            'old_word_length',
+            'compression',
+         ]
     )
     plt.scatter(df['compression'], df['old_word_length'])
     plt.show()

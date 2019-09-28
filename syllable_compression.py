@@ -24,8 +24,8 @@ def compress_word(word):
 
 def compress_all():
     compressed = []
-    for word in brown.words():
-        if word.startswith('-') or word.endswith('-'):
+    for word in set(brown.words()):
+        if word.startswith('-') or word.endswith('-') or '$' in word:
             continue
         new_word = compress_word(word)
         if len(new_word) < len(word):

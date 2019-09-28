@@ -1,4 +1,5 @@
 import csv
+from math import log
 from nltk.corpus import brown, words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
@@ -60,7 +61,7 @@ def plot(data):
     )
     all_points = list(zip(df['compression'], df['old_word_length']))
     unique_points = set(all_points)
-    point_weight = [all_points.count(point) for point in unique_points]
+    point_weight = [50*log(all_points.count(point)) for point in unique_points]
     plt.scatter(
         [point[0] for point in unique_points],
         [point[1] for point in unique_points],

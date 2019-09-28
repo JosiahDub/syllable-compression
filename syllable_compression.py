@@ -1,3 +1,4 @@
+import csv
 from nltk.corpus import brown
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
@@ -24,6 +25,8 @@ def compress_word(word):
 def compress_all():
     compressed = []
     for word in brown.words():
+        if word.startswith('-') or word.endswith('-'):
+            continue
         new_word = compress_word(word)
         if len(new_word) < len(word):
             compression = len(new_word)/len(word)
@@ -33,19 +36,28 @@ def compress_all():
                 len(word),
                 compression,
             ])
+    return compressed
 
+
+def plot(data):
     df = pd.DataFrame(
-        compressed,
+        data,
         columns=[
             'old_word',
             'new_word',
             'old_word_length',
             'compression',
-         ]
+        ]
     )
     plt.scatter(df['compression'], df['old_word_length'])
     plt.show()
 
 
 if __name__ == '__main__':
-    compress_all()
+    compressed = compress_all()
+    with open('raw_data.csv', 'w', newline='') as csv_file:
+        writer = csv.writer(csv_file)
+        writer.writerow(['Old word', 'New word', 'Old word length', 'Compression'])
+        for compress in compressed:
+            writer.writerow(compress)
+    plot(compressed)

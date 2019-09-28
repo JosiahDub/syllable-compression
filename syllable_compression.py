@@ -12,9 +12,16 @@ dic = pyphen.Pyphen(lang='en')
 word_list = words.words()
 
 
+def pyphen_syllables(word):
+    return dic.inserted(word).split('-')
+
+
+def nltk_syllables(word):
+    return ssp.tokenize(word)
+
+
 def compress_word(word):
-    # syllables = ssp.tokenize(word)
-    syllables = dic.inserted(word).split('-')
+    syllables = pyphen_syllables(word)
     replaced = syllables.copy()
     for index, syl in enumerate(syllables):
         for symbol, replacement_syllables in SYLLABLE_REPLACEMENT.items():

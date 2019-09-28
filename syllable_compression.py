@@ -1,5 +1,5 @@
 import csv
-from nltk.corpus import brown
+from nltk.corpus import brown, words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
 import pandas as pd
@@ -8,6 +8,8 @@ from stuff import SYLLABLE_REPLACEMENT
 
 ssp = SyllableTokenizer()
 dic = pyphen.Pyphen(lang='en')
+
+word_list = words.words()
 
 
 def compress_word(word):
@@ -24,8 +26,8 @@ def compress_word(word):
 
 def compress_all():
     compressed = []
-    for word in set(brown.words()):
-        if word.startswith('-') or word.endswith('-') or '$' in word:
+    for word in set(word_list):
+        if word.startswith('-') or word.endswith('-') or '$' in word or '-' in word:
             continue
         new_word = compress_word(word)
         if len(new_word) < len(word):

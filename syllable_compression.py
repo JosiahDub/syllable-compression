@@ -58,7 +58,14 @@ def plot(data):
             'compression',
         ]
     )
-    plt.scatter(df['compression'], df['old_word_length'])
+    all_points = list(zip(df['compression'], df['old_word_length']))
+    unique_points = set(all_points)
+    point_weight = [all_points.count(point) for point in unique_points]
+    plt.scatter(
+        [point[0] for point in unique_points],
+        [point[1] for point in unique_points],
+        s=point_weight,
+    )
     plt.show()
 
 

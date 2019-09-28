@@ -1,14 +1,17 @@
 from nltk.corpus import words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
+import pyphen
 import pandas as pd
 import matplotlib.pyplot as plt
 from stuff import SYLLABLE_REPLACEMENT
 
 ssp = SyllableTokenizer()
+dic = pyphen.Pyphen(lang='en')
 
 
 def compress_word(word):
-    syllables = ssp.tokenize(word)
+    # syllables = ssp.tokenize(word)
+    syllables = dic.inserted(word).split('-')
     replaced = syllables.copy()
     for index, syl in enumerate(syllables):
         for symbol, replacement_syllables in SYLLABLE_REPLACEMENT.items():
@@ -19,9 +22,7 @@ def compress_word(word):
 
 
 def compress_all():
-
     compressed = []
-
     for word in words.words():
         new_word = compress_word(word)
         if len(new_word) < len(word):

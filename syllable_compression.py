@@ -71,8 +71,11 @@ def plot(data):
         [point[1] for point in unique_points],
         color=colors,
     )
+    ax.set_xlabel('Compression Ratio')
+    ax.set_ylabel('Original Word Length')
     cax, _ = matplotlib.colorbar.make_axes(ax)
     cbar = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap, norm=normalize)
+    cbar.ax.set_ylabel('Number of compressed words')
     # plt.show()
     plt.savefig('plot.png')
 

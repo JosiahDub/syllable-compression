@@ -11,11 +11,13 @@ from stuff import SYLLABLE_REPLACEMENT
 ssp = SyllableTokenizer()
 dic = pyphen.Pyphen(lang='en')
 
-word_list = words.words()
-
 
 def brown_words():
     return set(brown.words())
+
+
+def words_words():
+    return set(words.word())
 
 
 def pyphen_syllables(word):
@@ -37,7 +39,7 @@ def compress_word(word):
     return new_word
 
 
-def compress_all():
+def compress_all(word_list):
     compressed = []
     for word in set(word_list):
         if word.startswith('-') or word.endswith('-') or '$' in word or '-' in word:
@@ -87,6 +89,6 @@ def plot(df):
 
 
 if __name__ == '__main__':
-    compressed = compress_all()
+    compressed = compress_all(words_words())
     compressed.to_csv('raw_data.csv')
     plot(compressed)

@@ -1,9 +1,9 @@
-import csv
 from nltk.corpus import brown, words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
 import pandas as pd
 import matplotlib
+from matplotlib import colorbar
 import matplotlib.pyplot as plt
 from stuff import SYLLABLE_REPLACEMENT
 
@@ -11,6 +11,10 @@ ssp = SyllableTokenizer()
 dic = pyphen.Pyphen(lang='en')
 
 word_list = words.words()
+
+
+def brown_words():
+    return set(brown.words())
 
 
 def pyphen_syllables(word):
@@ -46,12 +50,8 @@ def compress_all():
                 len(word),
                 compression,
             ])
-    return compressed
-
-
-def plot(data):
     df = pd.DataFrame(
-        data,
+        compressed,
         columns=[
             'old_word',
             'new_word',
@@ -59,10 +59,14 @@ def plot(data):
             'compression',
         ]
     )
+    return df
+
+
+def plot(df):
     all_points = list(zip(df['compression'], df['old_word_length']))
     unique_points = set(all_points)
     point_count = [all_points.count(point) for point in unique_points]
-    cmap = matplotlib.cm.get_cmap('viridis')
+    cmap = matplotlib.cm.get_cmap('gnuplot')
     normalize = matplotlib.colors.Normalize(vmin=min(point_count), vmax=max(point_count))
     colors = [cmap(normalize(value)) for value in point_count]
     fig, ax = plt.subplots(figsize=(10, 10))
@@ -70,21 +74,18 @@ def plot(data):
         [point[0] for point in unique_points],
         [point[1] for point in unique_points],
         color=colors,
+        s=[100 for _ in range(len(unique_points))]
     )
-    ax.set_xlabel('Compression Ratio')
-    ax.set_ylabel('Original Word Length')
-    cax, _ = matplotlib.colorbar.make_axes(ax)
-    cbar = matplotlib.colorbar.ColorbarBase(cax, cmap=cmap, norm=normalize)
-    cbar.ax.set_ylabel('Number of compressed words')
+    ax.set_xlabel('Compression Ratio', fontsize='xx-large')
+    ax.set_ylabel('Original Word Length', fontsize='xx-large')
+    cax, _ = colorbar.make_axes(ax)
+    cbar = colorbar.ColorbarBase(cax, cmap=cmap, norm=normalize)
+    cbar.ax.set_ylabel('Number of compressed words', fontsize='xx-large')
     # plt.show()
     plt.savefig('plot.png')
 
 
 if __name__ == '__main__':
     compressed = compress_all()
-    with open('raw_data.csv', 'w', newline='') as csv_file:
-        writer = csv.writer(csv_file)
-        writer.writerow(['Old word', 'New word', 'Old word length', 'Compression'])
-        for compress in compressed:
-            writer.writerow(compress)
+    compressed.to_csv('raw_data.csv')
     plot(compressed)

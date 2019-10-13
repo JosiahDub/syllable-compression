@@ -23,7 +23,8 @@ SYLLABLE_REPLACEMENT = {
         'eff',
     ],
     'G': [
-        'gee'
+        'gee',
+        'ghee',
     ],
     'H': [
 
@@ -45,7 +46,8 @@ SYLLABLE_REPLACEMENT = {
         'em'
     ],
     'N': [
-        'en'
+        'en',
+        'in',
     ],
     'O': [
         'oh'
@@ -59,6 +61,8 @@ SYLLABLE_REPLACEMENT = {
         'queue',
     ],
     'R': [
+        'ar',
+        'arr',
         'are',
     ],
     'S': [
@@ -90,7 +94,7 @@ SYLLABLE_REPLACEMENT = {
         'zee'
     ],
     '0': [
-        'zero'
+
     ],
     '1': [
         'one',
@@ -127,5 +131,6 @@ SYLLABLE_REPLACEMENT = {
     ],
     '10': [
         'ten',
+        'tin',
     ],
 }

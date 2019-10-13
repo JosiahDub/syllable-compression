@@ -17,7 +17,7 @@ def brown_words():
 
 
 def words_words():
-    return set(words.word())
+    return set(words.words())
 
 
 def pyphen_syllables(word):
@@ -28,8 +28,8 @@ def nltk_syllables(word):
     return ssp.tokenize(word)
 
 
-def compress_word(word):
-    syllables = pyphen_syllables(word)
+def compress_word(word, syllable_function):
+    syllables = syllable_function(word)
     replaced = syllables.copy()
     for index, syl in enumerate(syllables):
         for symbol, replacement_syllables in SYLLABLE_REPLACEMENT.items():
@@ -39,12 +39,12 @@ def compress_word(word):
     return new_word
 
 
-def compress_all(word_list):
+def compress_all(word_list, syllable_function):
     compressed = []
-    for word in set(word_list):
-        if word.startswith('-') or word.endswith('-') or '$' in word or '-' in word:
+    for word in word_list:
+        if '-' in word or '$' in word:
             continue
-        new_word = compress_word(word)
+        new_word = compress_word(word, syllable_function)
         if len(new_word) < len(word):
             compression = len(new_word)/len(word)
             compressed.append([
@@ -89,6 +89,6 @@ def plot(df):
 
 
 if __name__ == '__main__':
-    compressed = compress_all(words_words())
+    compressed = compress_all(words_words(), pyphen_syllables)
     compressed.to_csv('raw_data.csv')
     plot(compressed)

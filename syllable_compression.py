@@ -1,3 +1,4 @@
+import re
 from nltk.corpus import brown, words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
@@ -42,7 +43,8 @@ def compress_word(word, syllable_function):
 def compress_all(word_list, syllable_function):
     compressed = []
     for word in word_list:
-        if '-' in word or '$' in word:
+        # Look for excluded characters, currently -, $, and 0-9
+        if re.match(r'.*[-$\d].*', word):
             continue
         new_word = compress_word(word, syllable_function)
         if len(new_word) < len(word):
@@ -65,7 +67,7 @@ def compress_all(word_list, syllable_function):
     return df
 
 
-def plot(df):
+def plot(df, plot_name):
     all_points = list(zip(df['compression'], df['old_word_length']))
     unique_points = set(all_points)
     point_count = [all_points.count(point) for point in unique_points]
@@ -84,8 +86,7 @@ def plot(df):
     cax, _ = colorbar.make_axes(ax)
     cbar = colorbar.ColorbarBase(cax, cmap=cmap, norm=normalize)
     cbar.ax.set_ylabel('Number of compressed words', fontsize='xx-large')
-    # plt.show()
-    plt.savefig('plot.png')
+    plt.savefig(plot_name)
 
 
 if __name__ == '__main__':

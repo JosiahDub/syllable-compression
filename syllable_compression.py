@@ -2,8 +2,9 @@ from nltk.corpus import brown, words
 from nltk.tokenize.sonority_sequencing import SyllableTokenizer
 import pyphen
 import pandas as pd
-import matplotlib
 from matplotlib import colorbar
+from matplotlib.cm import get_cmap
+from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
 from stuff import SYLLABLE_REPLACEMENT
 
@@ -66,8 +67,8 @@ def plot(df):
     all_points = list(zip(df['compression'], df['old_word_length']))
     unique_points = set(all_points)
     point_count = [all_points.count(point) for point in unique_points]
-    cmap = matplotlib.cm.get_cmap('gnuplot')
-    normalize = matplotlib.colors.Normalize(vmin=min(point_count), vmax=max(point_count))
+    cmap = get_cmap('gnuplot')
+    normalize = Normalize(vmin=min(point_count), vmax=max(point_count))
     colors = [cmap(normalize(value)) for value in point_count]
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.scatter(

@@ -7,7 +7,7 @@ from matplotlib import colorbar
 from matplotlib.cm import get_cmap
 from matplotlib.colors import Normalize
 import matplotlib.pyplot as plt
-from stuff import SYLLABLE_REPLACEMENT
+from syllable_replacement import SYLLABLE_REPLACEMENT
 
 ssp = SyllableTokenizer()
 dic = pyphen.Pyphen(lang='en')
